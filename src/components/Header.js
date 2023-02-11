@@ -1,10 +1,10 @@
 import '../index.css';
 
-function Header() {
+function Header(props) {
     return (
         <header className="header">
             <div className="header__logo"></div>
-            <div className='header__button'>Регистрация</div>
+            <button onClick={props.onButtonClick} className='header__button'>{props.info.title}</button>
         </header>
     );
 }

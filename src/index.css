@@ -58,6 +58,9 @@
 @import url(./blocks/popup/__image-card/popup__image-card.css);
 @import url(./blocks/popup/__avatar-src-input-error/popup__avatar-src-input-error.css);
 @import url(./blocks/popup/__input/_avatar-src/popup__input_avatar-src.css);
+@import url(./blocks/popup/__message-image/popup__message-image.css);
+@import url(./blocks/popup/__title/_message/popup__title_message.css);
+@import url(./blocks/popup/__container/_message/popup__container_message.css);
 
 @import url(./blocks/sign/sign.css);
 @import url(./blocks/sign/__button/sign__button.css);
