@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../index.css';
+import FormForEntrance from './FormForEntrance.js';
 
 
 function Register(props) {
@@ -25,13 +26,16 @@ function Register(props) {
     return (
         <>
             <section className='sign'>
-                <h2 className='sign__title'>Регистрация</h2>
-                <form name='login' className='sign__form' onSubmit={handleSubmit}>
-                    <input value={email} onChange={handleChangeEmail} type='email' name='email' placeholder='Email' className='sign__input sign__input_email' required></input>
-                    <input value={password} onChange={handleChangePassword} type='password' name='password' placeholder='Пароль' className='sign__input sign__input_password' minLength="5" required></input>
-                    <button type='submit' name='sign-in' className='sign__button'>Зарегистрироваться</button>
-                    <a href='/sign-in' className='sign__link'>Уже зарегистрированы? Войти</a>
-                </form>
+            <FormForEntrance 
+                title='Регистрация'
+                onSubmit={handleSubmit} 
+                changeEmail={handleChangeEmail} 
+                changePassword={handleChangePassword}
+                valueEmail={email}
+                valuePassword={password}
+                buttonTitle='Зарегистрироваться'
+                />
+                <a href='/sign-in' className='sign__link'>Уже зарегистрированы? Войти</a>
             </section>
         </>
     )

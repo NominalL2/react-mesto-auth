@@ -56,7 +56,6 @@ function App() {
       auth.checkToken(jwt)
         .then((res) => {
           if (res) {
-            console.log(res)
             setHeaderInfo({ link: '/sign-in', title: 'Выйти', email: res.data.email })
             navigate('/mesto', setLoggedIn(true))
           }
@@ -157,7 +156,7 @@ function App() {
   function handleLogin(password, email) {
     auth.login(password, email)
       .then(() => {
-        checkToken()
+        setHeaderInfo({ link: '/sign-in', title: 'Выйти', email: email })
         navigate('/mesto', setLoggedIn(true));
       })
       .catch(() => {
@@ -168,21 +167,23 @@ function App() {
   useEffect(() => {
     checkToken();
 
-    api.setProfileInfo()
-      .then((res) => {
-        setCurrentUser(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    if (loggedIn) {
+      api.setProfileInfo()
+        .then((res) => {
+          setCurrentUser(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
 
-    api.initialCards()
-      .then((res) => {
-        setCurrentCards(res)
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      api.initialCards()
+        .then((res) => {
+          setCurrentCards(res)
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
 
     if (location.pathname === '/sign-in' || location.pathname === '/' && loggedIn === false) {
       setHeaderInfo({ link: '/sign-up', title: 'Регистрация', email: '' })
@@ -193,7 +194,7 @@ function App() {
     else if (location.pathname === '/mesto' || location.pathname === '/' && loggedIn === true) {
       setHeaderInfo({ link: '/sign-in', title: 'Выйти' })
     }
-  }, [])
+  }, [loggedIn])
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../index.css';
+import FormForEntrance from './FormForEntrance.js';
 
 
 function Login(props) {
@@ -24,12 +25,15 @@ function Login(props) {
     return (
         <>
             <section className='sign'>
-                <h2 className='sign__title'>Вход</h2>
-                <form onSubmit={handleSubmit} name='login' className='sign__form'>
-                    <input value={email} onChange={handleChangeEmail} type='email' name='email' placeholder='Email' className='sign__input sign__input_email' required></input>
-                    <input value={password} onChange={handleChangePassword} type='password' name='password' placeholder='Пароль' className='sign__input sign__input_password' minLength="5" required></input>
-                    <button type='submit' name='sign-in' className='sign__button'>Войти</button>
-                </form>
+                <FormForEntrance 
+                title='Вход'
+                onSubmit={handleSubmit} 
+                changeEmail={handleChangeEmail} 
+                changePassword={handleChangePassword}
+                valueEmail={email}
+                valuePassword={password}
+                buttonTitle='Войти'
+                />
             </section>
         </>
     )

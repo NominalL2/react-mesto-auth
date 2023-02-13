@@ -17,7 +17,9 @@ function EditAvatarPopup(props) {
     }
 
     useEffect(() => {
+        if (props.isOpen) {
         setAvatarLink('');
+        }
     }, [props.isOpen])
     return (
         <PopupWithForm name="avatar-add" title="Обновить аватар" buttonName="Сохранить" isOpen={props.isOpen} onClose={props.onClose} onSubmit={handleSubmit}>

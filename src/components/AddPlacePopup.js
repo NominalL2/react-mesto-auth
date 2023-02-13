@@ -20,8 +20,10 @@ function AddPlacePopup(props) {
     }
 
     useEffect(() => {
-        setCardName('');
-        setCardLink('');
+        if (props.isOpen) {
+            setCardName('');
+            setCardLink('');
+        }
     }, [props.isOpen])
 
     return (
