@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import '../index.css';
-import MessagePopup from './MessagePopup.js';
 
 
 function Register(props) {
@@ -34,7 +33,6 @@ function Register(props) {
                     <a href='/sign-in' className='sign__link'>Уже зарегистрированы? Войти</a>
                 </form>
             </section>
-            <MessagePopup />
         </>
     )
 }

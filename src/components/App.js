@@ -1,5 +1,6 @@
 import '../index.css';
 import Header from './Header.js';
+import MessagePopup from './MessagePopup.js'
 import { useState, useEffect } from 'react';
 import { api } from '../utils/Api.js';
 import { CurrentUserContext } from '../context/CurrentUserContext.js';
@@ -19,6 +20,8 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isMessagePopupOpen, setIsMessagePopupOpen] = useState(false);
+  const [messagePopupValue, setMessagePopupValue] = useState({ logged: false, title: '' })
   const [isCardOpen, setIsCardOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
@@ -32,12 +35,17 @@ function App() {
     setSelectedCard(card);
     setIsCardOpen(true);
   }
+  const handleMessagePopupOpen = (logged, title) => {
+    setMessagePopupValue({ logged: logged, title: title })
+    setIsMessagePopupOpen(true)
+  }
 
   const closeAllPopups = () => {
     setIsAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsCardOpen(false);
+    setIsMessagePopupOpen(false);
     setSelectedCard({});
   }
 
@@ -49,7 +57,7 @@ function App() {
         .then((res) => {
           if (res) {
             console.log(res)
-            setHeaderInfo({ link: '/sign-in', title: 'Выйти', email: res.email })
+            setHeaderInfo({ link: '/sign-in', title: 'Выйти', email: res.data.email })
             navigate('/mesto', setLoggedIn(true))
           }
         })
@@ -57,8 +65,20 @@ function App() {
   }
 
   function handleHeaderButton() {
-    localStorage.removeItem('jwt');
-    navigate(headerInfo.link);
+    if (location.pathname === '/sign-in') {
+      navigate('/sign-up');
+      setHeaderInfo({ link: '/sign-in', title: 'Войти', email: '' })
+    }
+    else if (location.pathname === '/sign-up') {
+      navigate('/sign-in');
+      setHeaderInfo({ link: '/sign-up', title: 'Регистрация', email: '' })
+    }
+    else if (location.pathname === '/mesto') {
+      navigate('/sign-in');
+      setHeaderInfo({ link: '/sign-up', title: 'Регистрация' })
+      localStorage.removeItem('jwt');
+      setLoggedIn(false)
+    }
   }
 
   function handleCardLike(card) {
@@ -124,21 +144,24 @@ function App() {
 
   function handleRegister(password, email) {
     auth.register(password, email)
-      .then((res) => {
-        console.log(res)
+      .then(() => {
+        navigate('/sign-in');
+        setHeaderInfo({ title: 'Регистрация' })
+        handleMessagePopupOpen(true, 'Вы успешно зарегистрировались!')
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        handleMessagePopupOpen(false, 'Что-то пошло не так! Попробуйте ещё раз')
       })
   }
 
   function handleLogin(password, email) {
     auth.login(password, email)
-      .then((res) => {
-        console.log(res)
+      .then(() => {
+        checkToken()
+        navigate('/mesto', setLoggedIn(true));
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        handleMessagePopupOpen(false, 'Что-то пошло не так! Попробуйте ещё раз')
       })
   }
 
@@ -178,7 +201,7 @@ function App() {
 
         <CurrentCardsContext.Provider value={currentCards}>
           <div className='page'>
-            <Header info={headerInfo} onButtonClick={handleHeaderButton} />
+            <Header info={headerInfo} onButtonClick={handleHeaderButton} loggedIn={loggedIn} />
             <Routes>
               <Route path='/mesto' element={<ProtectedRouteElement
                 element={Mesto}
@@ -203,6 +226,7 @@ function App() {
               <Route path='/sign-up' element={<Register onRegister={handleRegister} />} />
               <Route path="/" element={loggedIn ? <Navigate to="/mesto" replace /> : <Navigate to="/sign-in" replace />} />
             </Routes>
+            <MessagePopup isOpen={isMessagePopupOpen} messageValue={messagePopupValue} onClose={closeAllPopups} />
           </div>
         </CurrentCardsContext.Provider>
 
