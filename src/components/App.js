@@ -165,8 +165,6 @@ function App() {
   }
 
   useEffect(() => {
-    checkToken();
-
     if (loggedIn) {
       api.setProfileInfo()
         .then((res) => {
@@ -184,6 +182,10 @@ function App() {
           console.log(err);
         })
     }
+  }, [loggedIn])
+
+  useEffect(() => {
+    checkToken();
 
     if (location.pathname === '/sign-in' || location.pathname === '/' && loggedIn === false) {
       setHeaderInfo({ link: '/sign-up', title: 'Регистрация', email: '' })
@@ -194,7 +196,7 @@ function App() {
     else if (location.pathname === '/mesto' || location.pathname === '/' && loggedIn === true) {
       setHeaderInfo({ link: '/sign-in', title: 'Выйти' })
     }
-  }, [loggedIn])
+  }, [])
 
   return (
     <>
